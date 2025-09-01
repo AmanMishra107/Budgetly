@@ -227,10 +227,14 @@ export const TransactionForm = ({ onSubmit }: TransactionFormProps) => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
-                <Label htmlFor="amount" className="text-white font-semibold flex items-center gap-2 text-sm sm:text-base">
-                  <DollarSign className="w-4 h-4 text-purple-400" />
+                <Label
+                  htmlFor="amount"
+                  className="text-white font-semibold flex items-center gap-2 text-sm sm:text-base"
+                >
+                  <span className="text-purple-400 text-lg">₹</span>
                   Amount
                 </Label>
+
                 <Input
                   id="amount"
                   type="number"

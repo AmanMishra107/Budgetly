@@ -115,7 +115,7 @@ const Index = () => {
           >
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-                Hello Sir/Ma'am
+                {user?.user_metadata?.name ? `Hello, ${user.user_metadata.name}` : "Hello Sir/Ma'am"}
               </h1>
               <p className="text-white/60 mt-1">Welcome back, manage your finances with style</p>
             </div>

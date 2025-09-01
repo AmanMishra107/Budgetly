@@ -5,160 +5,60 @@
 /* Budget Planner Design System - Pastel & Financial Theme */
 
 @layer base {
-  :root {
-    /* Base colors - soft and calming */
-    --background: 220 15% 97%;
-    --foreground: 215 20% 15%;
-
-    /* Card system */
-    --card: 0 0% 100%;
-    --card-foreground: 215 20% 15%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 20% 15%;
-
-    /* Primary - Premium Gold */
-    --primary: 45 90% 60%;
-    --primary-foreground: 0 0% 0%;
-
-    /* Secondary - Deep Blue */
-    --secondary: 220 40% 15%;
-    --secondary-foreground: 0 0% 100%;
-
-    /* Muted tones */
-    --muted: 220 15% 92%;
-    --muted-foreground: 215 15% 45%;
-
-    /* Accent - Premium Purple */
-    --accent: 270 50% 60%;
-    --accent-foreground: 0 0% 100%;
-
-    /* Financial status colors */
-    --success: 142 45% 50%;
-    --success-foreground: 0 0% 100%;
-    
-    --warning: 45 90% 60%;
-    --warning-foreground: 0 0% 100%;
-
-    --destructive: 0 75% 65%;
-    --destructive-foreground: 0 0% 100%;
-
-    /* Income specific */
-    --income: 142 50% 55%;
-    --income-light: 142 40% 85%;
-    --income-foreground: 0 0% 100%;
-
-    /* Expense specific */
-    --expense: 15 70% 70%;
-    --expense-light: 15 50% 90%;
-    --expense-foreground: 0 0% 100%;
-
-    /* Borders and inputs */
-    --border: 220 15% 85%;
-    --input: 220 15% 90%;
-    --ring: 142 35% 55%;
-
-    /* Premium Gradients */
-    --gradient-income: linear-gradient(135deg, hsl(142 60% 50%), hsl(120 55% 55%));
-    --gradient-expense: linear-gradient(135deg, hsl(0 70% 65%), hsl(15 65% 70%));
-    --gradient-balance: linear-gradient(135deg, hsl(45 90% 60%), hsl(35 85% 65%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 20% 96%));
-    --gradient-hero: linear-gradient(135deg, hsl(270 50% 60%), hsl(45 90% 60%));
-    --gradient-premium: linear-gradient(135deg, hsl(220 40% 15%), hsl(270 50% 25%));
-
-    /* Shadows for cards */
-    --shadow-soft: 0 2px 10px hsl(215 20% 15% / 0.08);
-    --shadow-medium: 0 4px 20px hsl(215 20% 15% / 0.12);
-    --shadow-hover: 0 8px 30px hsl(215 20% 15% / 0.15);
-
-    --radius: 0.75rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    /* Dark theme with muted pastels */
-    --background: 215 25% 8%;
-    --foreground: 220 15% 92%;
-
-    --card: 215 20% 12%;
-    --card-foreground: 220 15% 92%;
-
-    --popover: 215 20% 12%;
-    --popover-foreground: 220 15% 92%;
-
-    --primary: 142 35% 45%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 215 20% 18%;
-    --secondary-foreground: 220 15% 85%;
-
-    --muted: 215 20% 15%;
-    --muted-foreground: 220 10% 55%;
-
-    --accent: 15 65% 60%;
-    --accent-foreground: 0 0% 100%;
-
-    --success: 142 40% 45%;
-    --success-foreground: 0 0% 100%;
-    
-    --warning: 45 80% 55%;
-    --warning-foreground: 0 0% 100%;
-
-    --destructive: 0 65% 55%;
-    --destructive-foreground: 0 0% 100%;
-
-    --income: 142 45% 50%;
-    --income-light: 142 30% 20%;
-    --income-foreground: 0 0% 100%;
-
-    --expense: 15 60% 60%;
-    --expense-light: 15 40% 20%;
-    --expense-foreground: 0 0% 100%;
-
-    --border: 215 20% 20%;
-    --input: 215 20% 18%;
-    --ring: 142 35% 45%;
-
-    --gradient-income: linear-gradient(135deg, hsl(142 45% 50%), hsl(142 40% 55%));
-    --gradient-expense: linear-gradient(135deg, hsl(15 60% 60%), hsl(15 55% 65%));
-    --gradient-balance: linear-gradient(135deg, hsl(210 45% 50%), hsl(210 40% 55%));
-    --gradient-card: linear-gradient(145deg, hsl(215 20% 12%), hsl(215 25% 10%));
-
-    --shadow-soft: 0 2px 10px hsl(0 0% 0% / 0.3);
-    --shadow-medium: 0 4px 20px hsl(0 0% 0% / 0.4);
-    --shadow-hover: 0 8px 30px hsl(0 0% 0% / 0.5);
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+    /* Universal Premium Scrollbar */
+    * {
+        /* Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: #a78bfa #18181b;
+    }
+    /* Chrome, Safari, Edge */
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+        /* also styles horizontal scrollbar */
+        background: #18181b;
+    }
+    *::-webkit-scrollbar-track {
+        background: #18181b;
+        border-radius: 9999px;
+    }
+    *::-webkit-scrollbar-thumb {
+        background: linear-gradient( 135deg, #a78bfa 10%, #ec4899 50%, #06b6d4 90%);
+        border-radius: 9999px;
+        border: 2px solid #18181b;
+    }
+    *::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient( 135deg, #a78bfa 0%, #d946ef 40%, #f59e42 100%);
+    }
+}
 
-  body {
-    @apply bg-background text-foreground;
-  }
+::selection {
+    background: #a78bfa;
+    /* Purple */
+    color: white;
+}
+
+:focus-visible {
+    outline: 2px solid #a78bfa;
+}
+
+* {
+    -webkit-tap-highlight-color: rgba(140, 46, 255, 0.15);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overscroll-behavior: contain;
 }
