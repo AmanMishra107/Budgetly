@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   TrendingUp,
   TrendingDown,
-  DollarSign,
+  IndianRupee,
   Calendar,
   FileText,
   Tag,
@@ -161,8 +161,9 @@ export const TransactionForm = ({ onSubmit }: TransactionFormProps) => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0">
-                <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <IndianRupee className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
+
               <div className="min-w-0">
                 <h3 className="text-xl sm:text-2xl font-bold text-white truncate">Add Transaction</h3>
                 <p className="text-sm sm:text-base text-white/60">Record your income or expense</p>
