@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
-import { autoTable } from 'jspdf-autotable';
+// Fixed import for jspdf-autotable that works with Vite
+import jsPDFAutoTable from 'jspdf-autotable';
 import { Transaction } from '@/types/budget';
 import { formatCurrency } from './currency';
 
@@ -111,23 +112,24 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
       white: [255, 255, 255] as [number, number, number]
     };
 
-    // Transparent watermark overlay ON TOP of content (see-through)
+    // Fixed transparent watermark overlay
     const addTransparentWatermarkOverlay = () => {
       try {
-        // Create graphics state with opacity (if supported)
-        const gState = (doc as any).GState ? (doc as any).GState({ opacity: 0.15 }) : null;
-        if (gState) {
-          (doc as any).setGState(gState);
-        }
+        // Save current graphics state
+        (doc as any).saveGraphicsState();
+        
+        // Set transparency
+        const gState = { opacity: 0.1 };
+        (doc as any).setGState(gState);
 
         // Watermark style
-        doc.setTextColor(120, 120, 120); // medium gray
+        doc.setTextColor(120, 120, 120);
         doc.setFontSize(65);
         doc.setFont('helvetica', 'bold');
 
         // Center coordinates
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
+        const pageWidth = doc.internal.pageSize.width;
+        const pageHeight = doc.internal.pageSize.height;
         const centerX = pageWidth / 2;
         const centerY = pageHeight / 2;
 
@@ -137,21 +139,18 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
           align: 'center'
         });
 
-        // Reset opacity (if supported)
-        if (gState) {
-          const reset = (doc as any).GState({ opacity: 1 });
-          (doc as any).setGState(reset);
-        }
+        // Restore graphics state
+        (doc as any).restoreGraphicsState();
       } catch (error) {
         console.warn('Transparent watermark overlay failed, using fallback:', error);
-
-        // Fallback: fake transparency with lighter color
-        doc.setTextColor(200, 200, 200); // light gray
+        
+        // Fallback with very light color
+        doc.setTextColor(245, 245, 245);
         doc.setFontSize(65);
         doc.setFont('helvetica', 'bold');
 
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
+        const pageWidth = doc.internal.pageSize.width;
+        const pageHeight = doc.internal.pageSize.height;
         const centerX = pageWidth / 2;
         const centerY = pageHeight / 2;
 
@@ -161,7 +160,6 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
         });
       }
     };
-
 
     const createHeader = () => {
       try {
@@ -270,7 +268,8 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
           `Rs. ${transaction.amount.toFixed(2)}`
         ]);
 
-        autoTable(doc, {
+        // Use the imported jsPDFAutoTable function directly
+        jsPDFAutoTable(doc, {
           head: [['Date', 'Type', 'Category', 'Description', 'Payment', 'Amount']],
           body: tableData,
           startY: startY,
@@ -327,7 +326,7 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
             }
           },
           didDrawPage: (data) => {
-            // Add transparent watermark AFTER page content is drawn (on top)
+            // Add transparent watermark AFTER page content is drawn
             addTransparentWatermarkOverlay();
 
             const pageHeight = doc.internal.pageSize.height;
