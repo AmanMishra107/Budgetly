@@ -16,7 +16,7 @@ export const PremiumHero = ({ onGetStarted }: PremiumHeroProps) => {
 
   const features = [
     { icon: TrendingUp, text: "Smart Analytics" },
-    { icon: Shield, text: "Bank Security" },
+    { icon: Shield, text: "Security" },
     { icon: Zap, text: "Real-time Sync" },
     { icon: BarChart3, text: "Deep Insights" }
   ];
@@ -73,11 +73,11 @@ export const PremiumHero = ({ onGetStarted }: PremiumHeroProps) => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
         >
-          <span className="block bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            Smart Budget
+          <span className="block bg-gradient-to-r from-white to-pink-300 bg-clip-text text-transparent">
+            "BUDGETLY"
           </span>
           <span className="block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Planner Pro
+            Smart Budget Planner
           </span>
         </motion.h1>
 
@@ -88,7 +88,7 @@ export const PremiumHero = ({ onGetStarted }: PremiumHeroProps) => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-xl md:text-2xl text-white/70 mb-12 max-w-2xl mx-auto leading-relaxed"
         >
-          Take control of your finances with AI-powered insights and secure Indian banking integration
+          Take control of your finances with smart insights and seamless integration.
         </motion.p>
 
         {/* Feature icons */}
