@@ -1,7 +1,6 @@
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
-// Fixed import for jspdf-autotable that works with Vite
-import jsPDFAutoTable from 'jspdf-autotable';
+// REMOVED: import jsPDFAutoTable from 'jspdf-autotable';
 import { Transaction } from '@/types/budget';
 import { formatCurrency } from './currency';
 
@@ -112,24 +111,23 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
       white: [255, 255, 255] as [number, number, number]
     };
 
-    // Fixed transparent watermark overlay
+    // Transparent watermark overlay ON TOP of content (see-through)
     const addTransparentWatermarkOverlay = () => {
       try {
-        // Save current graphics state
-        (doc as any).saveGraphicsState();
-        
-        // Set transparency
-        const gState = { opacity: 0.1 };
-        (doc as any).setGState(gState);
+        // Create graphics state with opacity (if supported)
+        const gState = (doc as any).GState ? (doc as any).GState({ opacity: 0.15 }) : null;
+        if (gState) {
+          (doc as any).setGState(gState);
+        }
 
         // Watermark style
-        doc.setTextColor(120, 120, 120);
+        doc.setTextColor(120, 120, 120); // medium gray
         doc.setFontSize(65);
         doc.setFont('helvetica', 'bold');
 
         // Center coordinates
-        const pageWidth = doc.internal.pageSize.width;
-        const pageHeight = doc.internal.pageSize.height;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
         const centerX = pageWidth / 2;
         const centerY = pageHeight / 2;
 
@@ -139,18 +137,21 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
           align: 'center'
         });
 
-        // Restore graphics state
-        (doc as any).restoreGraphicsState();
+        // Reset opacity (if supported)
+        if (gState) {
+          const reset = (doc as any).GState({ opacity: 1 });
+          (doc as any).setGState(reset);
+        }
       } catch (error) {
         console.warn('Transparent watermark overlay failed, using fallback:', error);
-        
-        // Fallback with very light color
-        doc.setTextColor(245, 245, 245);
+
+        // Fallback: fake transparency with lighter color
+        doc.setTextColor(200, 200, 200); // light gray
         doc.setFontSize(65);
         doc.setFont('helvetica', 'bold');
 
-        const pageWidth = doc.internal.pageSize.width;
-        const pageHeight = doc.internal.pageSize.height;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
         const centerX = pageWidth / 2;
         const centerY = pageHeight / 2;
 
@@ -161,6 +162,8 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
       }
     };
 
+
+    // YOUR EXACT SAME header design
     const createHeader = () => {
       try {
         doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
@@ -196,6 +199,7 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
       }
     };
 
+    // YOUR EXACT SAME summary section
     const createSummary = () => {
       try {
         const startY = 50;
@@ -253,6 +257,7 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
       }
     };
 
+    // REPLACED: Manual table creation with YOUR EXACT SAME styling
     const createTransactionTable = (startY: number) => {
       try {
         const tableData = transactions.map(transaction => [
@@ -268,71 +273,71 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
           `Rs. ${transaction.amount.toFixed(2)}`
         ]);
 
-        // Use the imported jsPDFAutoTable function directly
-        jsPDFAutoTable(doc, {
-          head: [['Date', 'Type', 'Category', 'Description', 'Payment', 'Amount']],
-          body: tableData,
-          startY: startY,
-          theme: 'grid',
-          styles: {
-            fontSize: 8,
-            cellPadding: 3,
-            textColor: colors.text,
-            lineColor: [200, 200, 200],
-            lineWidth: 0.1,
-            overflow: 'linebreak'
-          },
-          headStyles: {
-            fillColor: colors.primary,
-            textColor: colors.white,
-            fontStyle: 'bold',
-            fontSize: 9,
-            halign: 'center',
-            cellPadding: 4
-          },
-          bodyStyles: {
-            fontSize: 8,
-            textColor: colors.text
-          },
-          alternateRowStyles: {
-            fillColor: colors.lighter
-          },
-          columnStyles: {
-            0: { halign: 'center', cellWidth: 22 },
-            1: { halign: 'center', cellWidth: 18 },
-            2: { halign: 'left', cellWidth: 30 },
-            3: { halign: 'left', cellWidth: 50 },
-            4: { halign: 'center', cellWidth: 20 },
-            5: { halign: 'right', cellWidth: 30 }
-          },
-          margin: { top: 5, left: 10, right: 10 },
-          tableLineColor: [220, 220, 220],
-          tableLineWidth: 0.1,
-          didParseCell: (data) => {
-            if (data.column.index === 1 && data.cell.raw) {
-              const type = data.cell.raw.toString().toLowerCase();
+        // Manual table implementation with YOUR EXACT styling
+        const rowHeight = 8;
+        const colWidths = [22, 18, 30, 50, 20, 30];
+        const colX = [10, 32, 50, 80, 130, 150];
+        let currentY = startY;
+
+        // Table header with YOUR EXACT colors and styling
+        doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+        doc.rect(10, currentY, 190, rowHeight + 2, 'F');
+
+        doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+
+        const headers = ['Date', 'Type', 'Category', 'Description', 'Payment', 'Amount'];
+        headers.forEach((header, i) => {
+          doc.text(header, colX[i] + 2, currentY + 6);
+        });
+
+        currentY += rowHeight + 2;
+
+        // Table rows with YOUR EXACT styling
+        tableData.forEach((row, index) => {
+          // Alternating row colors like YOUR design
+          if (index % 2 === 0) {
+            doc.setFillColor(colors.lighter[0], colors.lighter[1], colors.lighter[2]);
+            doc.rect(10, currentY, 190, rowHeight, 'F');
+          }
+
+          doc.setFontSize(8);
+          doc.setFont('helvetica', 'normal');
+
+          row.forEach((cell, colIndex) => {
+            // YOUR EXACT color coding for transaction types
+            if (colIndex === 1) { // Type column
+              const type = cell.toString().toLowerCase();
               if (type === 'income') {
-                data.cell.styles.textColor = colors.success;
-                data.cell.styles.fontStyle = 'bold';
+                doc.setTextColor(colors.success[0], colors.success[1], colors.success[2]);
+                doc.setFont('helvetica', 'bold');
               } else if (type === 'expense') {
-                data.cell.styles.textColor = colors.danger;
-                data.cell.styles.fontStyle = 'bold';
+                doc.setTextColor(colors.danger[0], colors.danger[1], colors.danger[2]);
+                doc.setFont('helvetica', 'bold');
               }
+            } else if (colIndex === 5) { // Amount column
+              doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
+              doc.setFont('helvetica', 'bold');
+            } else {
+              doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
+              doc.setFont('helvetica', 'normal');
             }
 
-            if (data.column.index === 5) {
-              data.cell.styles.fontStyle = 'bold';
-              data.cell.styles.fontSize = 8;
-            }
-          },
-          didDrawPage: (data) => {
-            // Add transparent watermark AFTER page content is drawn
-            addTransparentWatermarkOverlay();
+            const align = colIndex === 5 ? 'right' : 'left';
+            const xPos = align === 'right' ? colX[colIndex] + colWidths[colIndex] - 2 : colX[colIndex] + 2;
 
+            doc.text(cell, xPos, currentY + 6, { align });
+          });
+
+          currentY += rowHeight;
+
+          // Add new page if needed
+          if (currentY > 250) {
+            // YOUR EXACT footer before new page
             const pageHeight = doc.internal.pageSize.height;
             const pageWidth = doc.internal.pageSize.width;
 
-            // Enhanced footer with copyright
             doc.setFillColor(colors.accent[0], colors.accent[1], colors.accent[2]);
             doc.rect(0, pageHeight - 18, pageWidth, 18, 'F');
 
@@ -347,9 +352,37 @@ export const exportToPDF = (transactions: Transaction[], summary: any, filename:
 
             doc.setFontSize(7);
             doc.setFont('helvetica', 'bold');
-            doc.text(`Page ${data.pageNumber}`, pageWidth - 15, pageHeight - 7, { align: 'right' });
+            doc.text(`Page 1`, pageWidth - 15, pageHeight - 7, { align: 'right' });
+
+            // Add watermark and new page
+            addTransparentWatermarkOverlay();
+            doc.addPage();
+            currentY = 20;
           }
         });
+
+        // Final page watermark and footer
+        addTransparentWatermarkOverlay();
+
+        const pageHeight = doc.internal.pageSize.height;
+        const pageWidth = doc.internal.pageSize.width;
+
+        doc.setFillColor(colors.accent[0], colors.accent[1], colors.accent[2]);
+        doc.rect(0, pageHeight - 18, pageWidth, 18, 'F');
+
+        doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Budgetly - Your Personal Finance Manager', 10, pageHeight - 10);
+
+        doc.setFontSize(6);
+        const currentYear = new Date().getFullYear();
+        doc.text(`© ${currentYear} Budgetly. All rights reserved.`, 10, pageHeight - 4);
+
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Page 1`, pageWidth - 15, pageHeight - 7, { align: 'right' });
+
       } catch (error) {
         console.error('Table creation failed:', error);
       }
