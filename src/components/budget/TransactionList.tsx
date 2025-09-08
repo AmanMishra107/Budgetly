@@ -28,6 +28,11 @@ export const TransactionList = ({ transactions, onDelete }: TransactionListProps
     return matchesSearch && matchesType && matchesCategory;
   });
 
+  // Get top 5 recent transactions
+  const topFilteredTransactions = filteredTransactions
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
+
   const categories = defaultCategories.filter(c => filterType === 'all' || c.type === filterType);
 
   return (
@@ -57,7 +62,7 @@ export const TransactionList = ({ transactions, onDelete }: TransactionListProps
 
             <div className="flex items-center gap-2 text-sm sm:text-base text-white/70 bg-white/5 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/10">
               <Filter className="w-4 h-4 text-purple-400" />
-              <span className="font-medium">{filteredTransactions.length} of {transactions.length}</span>
+              <span className="font-medium">{topFilteredTransactions.length} of {transactions.length}</span>
             </div>
           </div>
 
@@ -129,7 +134,7 @@ export const TransactionList = ({ transactions, onDelete }: TransactionListProps
 
           {/* Transaction List */}
           <div className="space-y-3 sm:space-y-4">
-            {filteredTransactions.length === 0 ? (
+            {topFilteredTransactions.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -147,7 +152,7 @@ export const TransactionList = ({ transactions, onDelete }: TransactionListProps
                 </p>
               </motion.div>
             ) : (
-              filteredTransactions.map((transaction, index) => (
+              topFilteredTransactions.map((transaction, index) => (
                 <motion.div
                   key={transaction.id}
                   initial={{ opacity: 0, y: 20 }}
